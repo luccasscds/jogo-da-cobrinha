@@ -26,12 +26,14 @@ window.onload = function(){
     setInterval(jogo, 1000/10);
 }
 
-snake = [];
 posicaox = 10;
 posicaoy = 10;
+foodX = 15;
+foodY = 15;
 velx = 0;
 vely = 0;
 grid = 20;
+snake = [];
 tam = 5;
 
 function jogo(){
@@ -51,18 +53,29 @@ function jogo(){
     cxt.fillStyle = '#94ff94';
     cxt.fillRect(0, 0, 400, 400);
 
+    cxt.fillStyle = 'black';
+    for (var i = 0; i < snake.length; i++) {
+        cxt.fillRect(snake[i].x * grid, snake[i].y * grid, grid -1, grid - 1);
+        if(snake[i].x == posicaox && snake[i].y == posicaoy){
+            tam = 5;
+        } 
+    }
+
     snake.push({
         x: posicaox,
         y: posicaoy
     })
-
-    cxt.fillStyle = 'black';
-    for (let i = 0; i < snake.length; i++) {
-        cxt.fillRect(snake[i].x * grid, snake[i].y * grid, grid -1, grid - 1);        
-    }
-
     while(snake.length > tam){
         snake.shift();
+    }
+
+    cxt.fillStyle = '#94ff';
+    cxt.fillRect(foodX * grid, foodY * grid, grid - 1, grid - 1);
+
+    if(posicaox == foodX && posicaoy == foodY){
+        tam++;
+        foodX = Math.floor(Math.random() * grid);
+        foodY = Math.floor(Math.random() * grid);
     }
 
 }
