@@ -61,6 +61,7 @@ window.onload = function(){
     }
 
     var cnv = document.getElementById('canvas');
+    cnv.height = cnv.width = 600;
     cxt = cnv.getContext('2d');
     var frame = 9;
     var snake = new cobra();
