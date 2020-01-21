@@ -1,7 +1,7 @@
-posicaox = 10window.onload = function(){
+window.onload = function(){
 
-    window.addEventListener('keydown', movimentarPersonagem)
-    function movimentarPersonagem(e){
+    window.addEventListener('keydown', teclasMovimentacao)
+    function teclasMovimentacao(e){
         left = 37; up = 38; right = 39; down = 40;
         switch (e.keyCode) {
             case left:
@@ -34,6 +34,7 @@ posicaox = 10window.onload = function(){
     function comer(){
         if (snake.body[0][0] == carne.posicaox && snake.body[0][1] == carne.posicaoy){
             snake.body.unshift([snake.body[0][0], snake.body[0][1]]);
+            frame++;
             carne.posicaox = Math.floor(Math.random() * 29);
             carne.posicaoy = Math.floor(Math.random() * 29);
         }
@@ -54,14 +55,14 @@ posicaox = 10window.onload = function(){
         carne.create(cxt);
     }
     function loop(){
-        setTimeout(loop, 1000/10);
+        setTimeout(loop, 1000/frame);
         update();
         draw();
     }
 
     var cnv = document.getElementById('canvas');
     cxt = cnv.getContext('2d');
-
+    var frame = 9;
     var snake = new cobra();
     var carne = new food();
     init();
@@ -69,11 +70,11 @@ posicaox = 10window.onload = function(){
 
 class cobra{
     mvleft = false; mvup = false; mvright = false; mvdown = false;
-    //posicaox = 0; posicaoy = 0;
+    posicaox = 15; posicaoy = 29;
+	speed = 1;
     cor = 'black';
     width = 20;
-    body = [[10,10], [10,11]];
-    direcao = [0, -1];
+    body = [];
     
     create(cxt){
         cxt.fillStyle = this.cor;
@@ -83,30 +84,26 @@ class cobra{
     }
 
     move(){
-        var moveBody = [this.body[0][0] + this.direcao[0], this.body[0][1] + this.direcao[1]];
+        var moveBody = [this.posicaox, this.posicaoy];
 
         if(this.mvleft){
-            this.direcao = [-1,0];
+            this.posicaox -= this.speed;
         }else if(this.mvup){
-            this.direcao = [0,-1];
+            this.posicaoy -= this.speed;
         }else if(this.mvright){
-            this.direcao = [1,0];
+            this.posicaox += this.speed;
         }else if(this.mvdown){
-            this.direcao = [0,1];
+            this.posicaoy += this.speed;
         }
 
-        if (this.body[0][0] <= 0) {
-            this.direcao = [1,0];
-            this.mvleft = false;
-        }else if (this.body[0][0] >= 29) {
-            this.direcao = [-1, 0];
-            this.mvright = false;
-        }else if (this.body[0][1] <= 0) {
-            this.direcao = [0, 1];
-            this.mvup = false;
-        }else if (this.body[0][1] >= 29) {
-            this.direcao = [0, -1];
-            this.mvdown = false;
+        if (this.posicaox < 0) {
+            this.posicaox = 29;
+        }else if (this.posicaox > 29) {
+            this.posicaox = 0;
+        }else if (this.posicaoy < 0) {
+            this.posicaoy = 29;
+        }else if (this.posicaoy > 29) {
+            this.posicaoy = 0;
         }
 
         this.body.pop();
